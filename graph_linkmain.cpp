@@ -15,6 +15,9 @@ int main(){
   topo_sort(&gl);
   printf("\n");
 
+  map<int, int> cntmap;
+  modify_map(&cntmap);
+
   //获取gcov.test.c的行号运行情况，并修改概率和访问情况。暂时手动修改概率
   modify_visit(&gl,3);
   modify_visit(&gl,18);

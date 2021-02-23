@@ -4,6 +4,10 @@
 #include <malloc.h>
 #include <assert.h>
 #include <memory.h>
+#include <map>
+#include <string>
+
+using namespace std;
 
 #define default_vertex_size 100
 
@@ -54,4 +58,8 @@ void modify_visit(GraphLink* g, int v);
 void modify_prob(GraphLink* g, int v1, int v2, double prob);//定位一条边是否还有别的作用？
 //生成图
 void graph_gen(GraphLink* g);
+//获取临时map
+void modify_map(map<int,int> * cntmap);
+//自动化标记访问及修改概率
+void automodify(GraphLink* g, map<int,int> mymap);
 #endif

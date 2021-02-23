@@ -174,3 +174,23 @@ void modify_prob(GraphLink* g, int v1, int v2,double prob){
   return;
 }
 
+//自动化标记访问及修改概率
+void automodify(GraphLink* g, map<int,int> mymap){
+  if(NULL == g)return;
+  int idx = 0;
+  int toidx = 0;
+  for(int i = 0; i < g->NumVertices; ++i){
+    idx = g->nodeTable[i].idx;
+    if(0 != mymap[idx])
+      modify_visit(g,idx);
+    Edge* p = g->nodeTable[i].adj;
+    while(NULL != p){
+      toidx = g->nodeTable[p->idx].idx;
+      //TODO
+      //#(s,t)+1 / #s + n;
+      p = p->link;
+    }
+    printf(" NULL\n");
+  }
+}
+
