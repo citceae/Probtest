@@ -18,6 +18,9 @@ int main(){
   map<int, int> cntmap;
   modify_map(&cntmap);
 
+  automodify(&gl,cntmap);
+
+/*
   //获取gcov.test.c的行号运行情况，并修改概率和访问情况。暂时手动修改概率
   modify_visit(&gl,3);
   modify_visit(&gl,18);
@@ -29,7 +32,7 @@ int main(){
   modify_prob(&gl, 5, 14, (double)1/2);
   modify_prob(&gl, 6, 7, (double)1/2);
   modify_prob(&gl, 6, 10, (double)1/2);
-
+*/
   //显示图
   show_graph_link(&gl);
 

@@ -179,18 +179,28 @@ void automodify(GraphLink* g, map<int,int> mymap){
   if(NULL == g)return;
   int idx = 0;
   int toidx = 0;
+  int edges = 0;
   for(int i = 0; i < g->NumVertices; ++i){
     idx = g->nodeTable[i].idx;
+    edges = 0;
     if(0 != mymap[idx])
       modify_visit(g,idx);
     Edge* p = g->nodeTable[i].adj;
+    if(NULL == p)
+      modify_visit(g,idx);
+    //count edges
     while(NULL != p){
-      toidx = g->nodeTable[p->idx].idx;
-      //TODO
-      //#(s,t)+1 / #s + n;
+      edges++;
       p = p->link;
     }
-    printf(" NULL\n");
+    p = g->nodeTable[i].adj;
+    while(NULL != p){
+      toidx = g->nodeTable[p->idx].idx;
+      if(2 <= edges){
+        modify_prob(g,idx,toidx,(double)(mymap[toidx]+1)/(mymap[idx]+edges));
+      }
+      p = p->link;
+    }
   }
 }
 
