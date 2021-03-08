@@ -70,7 +70,36 @@ gcov可以生成json格式报告，理论上可以一定程度上解决效率问
 完成了#(s,t)+1 / #s + n的计算问题，抽象为DFA已知每个状态到达次数求转移函数发生次数，由于多对多的状态转移存在非确定解，此处仅为针对“顺序循环分支”简单结构下的处理。另外，由于生成CFG时生成了超级汇，但超级汇不能被自动识别为已到达，因此得到的reward会比标准定义的reward多1（已修复）
 ```遗留问题整理
 	1.如果存在异常控制流导致存在多对多，该如何处理？
-	2.引入超级汇（llvm）后导致reward+1，数据较小时可能有精度问题（遇到后修复）。似乎可以直接修复。利用超级汇没有后继。
+	(已修复）2.引入超级汇（llvm）后导致reward+1，数据较小时可能有精度问题（遇到后修复）。似乎可以直接修复。利用超级汇没有后继。
+	
+利用py生成modify_map
+
+3.8
+py生成modify_map完成
+整理一下运行过程：(单次）
+输入：目标程序test.c,及对应初始测试集input（此处为input.txt）
+1.获取衍生文件：
+	`clang test.c -emit-llvm -c -o test.bc -g （获得test.bc）
+	`gcc -fprofile-arcs -ftest-coverage test.c -o test (生成test和test.gcno)
+	`./test （生成test.gcda）
+	`gcov test.c --json （生成test.c.gcov.json.gz）
+	`gunzip test.c.gcov.json.gz (获得test.c.gcov.json)
+2.根据衍生文件生成待补充代码：
+	test.bc与test.c.gcov.json复制到主工作目录（后期可以通过指令解决）
+	`opt -load libMyCFGPass.so -MyCFG test.bc (获得myfunc.c（待测目标函数，依赖于函数名）和main.c(不关注））
+	用myfunc.c中内容替换掉graph_gen.c(注意函数名保留为graph_gen)
+	`python3 jsonread.py (自动替换掉了modify_map.cpp中内容）
+3.编译运行：
+	`g++ -g graph_gen.c graph_link.c modify_map.cpp linear_link.cpp graph_linkmain.cpp （生成a.out）
+	`./a.out 获得输出 关注reward
+
+！Pass.so生成文件目前是追加写入，可能需要调整	
+需要将二分区间的对比运行情况综合自动化完成
+	
+	
+
+	
+
 	
 
 

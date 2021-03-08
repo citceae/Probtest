@@ -46,6 +46,6 @@ int main(){
 
   //解reward x(0)
   VectorXf x = A.colPivHouseholderQr().solve(B);
-  cout<<x<<endl;
+  cout<<"reward:"<<endl<<x<<endl;
 
 }
