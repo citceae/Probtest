@@ -1,5 +1,6 @@
 import json
 
+#need a para to get the func name
 with open('test.c.gcov.json','r',encoding='utf8')as fp:
     json_data = json.load(fp)
     lines_info = json_data['files'][0]['lines']

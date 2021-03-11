@@ -103,6 +103,20 @@ py生成modify_map完成
 
 3.12
 编写了用于整体命令行控制的sy.py 部分运行功能完成
+
+修改了CFGpass，myfunc.c中函数名默认为graph_gen，故只需要将graph_gen.c内容直接替换为myfunc.c即可
+在py整体运行过程中能否以某种方式获取可执行程序的输出？(已解决）
+
+micmd = "./a.out"
+import subprocess
+res = subprocess.Popen(micmd, shell=True, stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE, close_fds=True)
+mi = res.stdout.readlines()
+#mi = float((mi[0].strip())) 
+a = float(str(mi[0],encoding='utf-8'))
+mi[0]即为第一行输出 byte格式
+
+reward的表现与预期不太符合
 	
 
 	

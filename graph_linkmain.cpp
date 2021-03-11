@@ -10,10 +10,10 @@ int main(){
   graph_gen(&gl);
 
   //显示图
-  show_graph_link(&gl);
+  //show_graph_link(&gl);
   //拓扑排序
-  topo_sort(&gl);
-  printf("\n");
+  //topo_sort(&gl);
+  //printf("\n");
 
   map<int, int> cntmap;
   modify_map(&cntmap);
@@ -34,18 +34,18 @@ int main(){
   modify_prob(&gl, 6, 10, (double)1/2);
 */
   //显示图
-  show_graph_link(&gl);
+  //show_graph_link(&gl);
 
   //构造矩阵计算reward
   int size = gl.NumVertices;
   MatrixXf A(size,size);
   VectorXf B(size);
   modify_matrix(&gl, A, B);
-  cout<<A<<endl<<endl<<B<<endl;
-  printf("\n");
+  //cout<<A<<endl<<endl<<B<<endl;
+  //printf("\n");
 
   //解reward x(0)
   VectorXf x = A.colPivHouseholderQr().solve(B);
-  cout<<"reward:"<<endl<<x<<endl;
+  cout<<x(0);
 
 }

@@ -35,7 +35,7 @@ namespace {
 			//	return false;
 			//}
 			file << "#include \"graph_link.h\"\n\n";
-            file << "void " + F.getName() + "(GraphLink* g){\n";
+            file << "void graph_gen(GraphLink* g){\n";
 			for (Function::iterator B_iter = F.begin(); B_iter != F.end(); ++B_iter){
 				BasicBlock* curBB = &*B_iter;
 				std::string name = curBB->getName().str();
