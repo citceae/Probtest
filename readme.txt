@@ -117,6 +117,16 @@ a = float(str(mi[0],encoding='utf-8'))
 mi[0]即为第一行输出 byte格式
 
 reward的表现与预期不太符合
+
+3.20
+采用了增量编译改进了修改后重编译的效率
+gunzip取消了重名提问
+目前运行方式：
+`python3 sy.py test.c -10000 9999 (对于test.c中的funcname暂未做参数处理)
+
+想要构造更好的程序覆盖的例子
+完整化迭代过程
+
 	
 
 	

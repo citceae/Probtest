@@ -4,7 +4,7 @@ import random
 import bisect
 import subprocess
 
-#python3 sy.py func.c sup inf  (可以考虑加上一个myfunc即内部函数名区分于func.c) 或者将func.c放在另一个workdir避免与opt得到的.c文件重名
+#python3 sy.py funcname.c sup inf  (可以考虑加上一个myfunc即内部函数名区分于func.c) 或者将func.c放在另一个workdir避免与opt得到的.c文件重名
 #loop until ? several times
 
 def randinitcase(start, stop, length):
@@ -81,11 +81,11 @@ if __name__ == '__main__':
             cmdstr = "./test {inp}".format(inp = case)
             #print(cmdstr)
             os.system(cmdstr)
-        cmdstr = "gcov {filename} --json && gunzip {filename}.gcov.json.gz && python3 jsonread.py \
-            && g++ -g graph_gen.c graph_link.c modify_map.cpp linear_link.cpp graph_linkmain.cpp".format(filename = args[1])
+        cmdstr = "gcov {filename} --json && gunzip -f {filename}.gcov.json.gz && python3 jsonread.py \
+            && make reward".format(filename = args[1])
         print(cmdstr)
         os.system(cmdstr)
-        micmd = "./a.out"
+        micmd = "./reward"
         res = subprocess.Popen(micmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
         mi = res.stdout.readlines()
         reward.append(float(str(mi[0],encoding='utf-8')))
