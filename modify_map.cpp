@@ -1,12 +1,12 @@
 #include "graph_link.h"
 
 void modify_map(map<int,int>* cntmap){
-	cntmap->insert(pair<int,int>(4,114));
-	cntmap->insert(pair<int,int>(5,114));
-	cntmap->insert(pair<int,int>(6,0));
-	cntmap->insert(pair<int,int>(7,0));
-	cntmap->insert(pair<int,int>(8,0));
-	cntmap->insert(pair<int,int>(9,0));
+	cntmap->insert(pair<int,int>(4,109));
+	cntmap->insert(pair<int,int>(5,109));
+	cntmap->insert(pair<int,int>(6,1));
+	cntmap->insert(pair<int,int>(7,1));
+	cntmap->insert(pair<int,int>(8,1));
+	cntmap->insert(pair<int,int>(9,1));
 	cntmap->insert(pair<int,int>(10,0));
 	cntmap->insert(pair<int,int>(11,0));
 	cntmap->insert(pair<int,int>(12,0));
@@ -16,6 +16,6 @@ void modify_map(map<int,int>* cntmap){
 	cntmap->insert(pair<int,int>(16,0));
 	cntmap->insert(pair<int,int>(17,0));
 	cntmap->insert(pair<int,int>(20,0));
-	cntmap->insert(pair<int,int>(24,0));
-	cntmap->insert(pair<int,int>(28,114));
+	cntmap->insert(pair<int,int>(24,1));
+	cntmap->insert(pair<int,int>(28,108));
 }

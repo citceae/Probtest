@@ -15,6 +15,7 @@ def randinitcase(start, stop, length):
         random_list.append(random.randint(start, stop))
     return random_list
         
+#TODO：seems unneccessary to add case to cases due to the redivide process        
 def sampling(reward:list,partition:list,cases:list,allcases:list,k):
     idxes=[i for i in range(len(reward))]
     for i in range(k):
