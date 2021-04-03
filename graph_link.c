@@ -183,11 +183,11 @@ void automodify(GraphLink* g, map<int,int> mymap){
   for(int i = 0; i < g->NumVertices; ++i){
     idx = g->nodeTable[i].idx;
     edges = 0;
-    if(0 != mymap[idx])
-      modify_visit(g,idx);
+    /*if(0 != mymap[idx])
+      modify_visit(g,idx);*/
     Edge* p = g->nodeTable[i].adj;
     if(NULL == p)
-      modify_visit(g,idx);
+      modify_visit(g,idx);//超级汇标记为已访问
     //count edges
     while(NULL != p){
       edges++;

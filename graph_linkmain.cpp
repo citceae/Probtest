@@ -16,7 +16,7 @@ int main(){
   //printf("\n");
 
   map<int, int> cntmap;
-  modify_map(&cntmap);
+  modify_map(&gl,&cntmap);
 
   automodify(&gl,cntmap);
 

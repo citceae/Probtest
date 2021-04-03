@@ -142,6 +142,19 @@ python3 sy.py test.c -10000 9999 4(iteration)
 
 目前使用单参数，多参数需要修改
 
+
+4.3
+修改了reward的计算，reached节点为公用，但需要注意先跑完第一次的所有测试再进行reached的记录,需要recompile(debug半小时orz)
+对于test.c程序，在一开始确定平均rand的前提下，可以确定只有两个区间完全相同时将有在负数区间做无用功，否则有较大期望正常得到正数区间的结果
+
+reward问题解决。
+多参数未实现，需要参照benchmark进行
+1.benchmark查看，暂时选定为DARPA cyber Grand Challenges binaries
+2.多源文件的目标CFG生成
+3.方法迁移到afl上，尝试用afl代替gcov
+4.abstract interpretation查看，学习方法指导区间分割
+
+python3 sy.py test.c -10000 9999 4
 	
 
 	

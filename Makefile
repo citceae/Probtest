@@ -18,3 +18,8 @@ graph_gen.o:graph_gen.c graph_link.h
 	
 clean:
 	rm -rf *.o
+	rm -rf test.gcno
+	rm -rf test.gcda
+	rm -rf test.bc
+	rm -rf test
+	rm -rf test.c.gcov.json

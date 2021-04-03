@@ -3,16 +3,24 @@ import sys
 import random
 import bisect
 import subprocess
+import jsonread as jread
 
 #python3 sy.py funcname.c sup inf iteration (可以考虑加上一个myfunc即内部函数名区分于func.c) 或者将func.c放在另一个workdir避免与opt得到的.c文件重名
 #loop until ? several times
 
+#average rand
 def randinitcase(start, stop, length):
     start, stop = (int(start), int(stop)) if start <= stop else (int(stop), int(start))
     length = int(abs(length)) if length else 0
     random_list = []
     for i in range(length):
         random_list.append(random.randint(start, stop))
+    '''
+    for i in range((int)(length/2)):
+        random_list.append(random.randint(start, (int)((stop+start)/2)))
+    for i in range((int)(length/2)):
+        random_list.append(random.randint((int)((stop+start)/2),stop) )
+    '''
     return random_list
         
 #TODO：seems unneccessary to add case to cases due to the redivide process        
@@ -55,28 +63,43 @@ def divide_cases(allcases:list, cases:list, partition:list):
 #also reset the count of gcov
 def recpile(cmdarg):
     cmdstr = "gcc -fprofile-arcs -ftest-coverage {filename} -o test ".format(filename = cmdarg)
-    print(cmdstr)
+    #print(cmdstr)
     os.system(cmdstr)
 
 #generate {targetfunction}.c , which descripe CFG of the target function
 def mvgraph_gen(cmdarg):
     cmdstr = "clang {filename} -emit-llvm -c -o test.bc -g && opt -load libMyCFGPass.so -MyCFG test.bc \
     && mv myfunc.c graph_gen.c".format(filename = cmdarg) #myfunc.c shoule be send to this function as a parameter?
-    print(cmdstr)
+    #print(cmdstr)
     os.system(cmdstr)
 
 #loop of cases
-def loop_cases(reward:list,cases:list,funcname):
+def loop_cases(reward:list,allcases:list,cases:list,reached:list,funcname):
+    #refresh reached
+    print("q:",reached)
+    recpile(funcname)
+    for case in allcases:
+        cmdstr = "./test {inp}".format(inp = case)
+        os.system(cmdstr)
+    cmdstr = "gcov {filename} --json && gunzip -f {filename}.gcov.json.gz ".format(filename = funcname)
+    os.system(cmdstr)
+    jread.readall(funcname,reached)
+
+    #refresh reward
     reward.clear()
     for i in range(len(cases)): #case[i] is some testcases in a partition
         recpile(funcname)
         for case in cases[i]:
             cmdstr = "./test {inp}".format(inp = case)
+            #if case > 9900:
+            #    print("yyyyyyyyyyyyyyyyessssssssss")
             #print(cmdstr)
             os.system(cmdstr)
-        cmdstr = "gcov {filename} --json && gunzip -f {filename}.gcov.json.gz && python3 jsonread.py \
-            && make reward".format(filename = funcname)
-        print(cmdstr)
+        cmdstr = "gcov {filename} --json && gunzip -f {filename}.gcov.json.gz ".format(filename = funcname)
+        os.system(cmdstr)
+        #& python3 jsonread.py && make reward
+        jread.readjson(funcname,reached)
+        cmdstr = "make reward"
         os.system(cmdstr)
         micmd = "./reward"
         res = subprocess.Popen(micmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
@@ -91,6 +114,8 @@ if __name__ == '__main__':
 
     one_sample_k = 10
 
+    reached = []
+
     partition=[]
     partition.append(int(args[2]))
     partition.append(int(args[3]))
@@ -98,6 +123,7 @@ if __name__ == '__main__':
     iteration = int(args[4])
 
     #rand sample for k=200 times
+    #average rand or fully rand
     allcases = randinitcase(args[2],args[3],200) #all cases
     #print(allcases)
 
@@ -112,13 +138,16 @@ if __name__ == '__main__':
 
     mvgraph_gen(args[1])
     for i in range(iteration):
-        loop_cases(reward,cases,args[1])
+        loop_cases(reward,allcases,cases,reached,args[1])
         print("iteration",i,' partition:',partition,' reward:',reward)
+        print(list(map(len,cases)))
+        print(reached)
         sampling(reward,partition,cases,allcases,one_sample_k)
         divide_part(reward,partition)
         divide_cases(allcases,cases,partition)
 
-    print(list(map(len,cases)))
+   
+    
         
         
 

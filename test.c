@@ -3,17 +3,8 @@
 
 void myfunc(int x){
     if (x>=9900){
-    	    x=x;
-    	    x=x;
-    	    x=x;
 	    if(x>=9950){
-	        x=x;
-	        x=x;
-	        x=x;
 	        if(x>=9990){
-	            x=x;
-	            x=x;
-	            x=x;
 	    	    return;
 	        }
 	        else{
