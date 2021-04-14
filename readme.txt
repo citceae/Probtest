@@ -156,7 +156,55 @@ reward问题解决。
 
 python3 sy.py test.c -10000 9999 4
 	
+4.8
+试图解决多源程序的cfg生成问题
+1.stack信息提到需要特定的llvmgoldlinker链接生成单个.bc文件？不知道如何使他能使用
+2.
+generate all .ll files
 
-	
+`clang -S -emit-llvm *.c (-g)
+link them into a single one
 
+`llvm-link -S -v -o single.ll *.ll
+(Optional) Optimise your code (maybe some alias analysis)
 
+`opt -S -O3 -aa -basic-aa -tbaa -licm single.ll -o optimised.ll
+Generate assembly (generates a optimised.s file)
+
+`llc optimised.ll
+Create executable (named a.out)
+
+`clang optimised.s
+
+通过方法2可以得到单个的.bc或者说.ll文件(阶段性胜利)
+下一个问题是对于单个.bc（意味着会有多个函数）如何构造出单个的CFG图 
+过程间的CFG图生成方式，虽然有过程间分析的理论基础，但是好像看不到合适的工具
+方法上应该就是结合call graph和每个单个CFG，大不了自己写orz
+引发的问题：作为唯一标识符的选择，需要和后面的afl工具（原gcov）给出的信息配合使用
+
+4.10
+应该尝试自己写
+对afl的研究发现覆盖率数据仍然需要的是类gcov工具（afl-cov），似乎没有特别大的方便
+可以利用gcov对多文件生成对应的覆盖率信息文件
+暂时想法是将唯一标志符定位（filename，linenumber）
+llvm自带的生成cfg和callgraph的有关命令为：
+clang $1.c -emit-llvm -S
+opt -dot-cfg $1.ll > /dev/null
+opt -dot-callgraph $1.ll > /dev/null
+dot -Tpng -o $1.png cfg.main.dot
+rm cfg.main.dot
+dot -Tpng -o $1.callgraph.png callgraph.dot
+rm callgraph.dot
+
+另：直接根据合成在一起的.ll文件做parse？
+
+参考myllvm文件下的cfg.o的方式做遍历（X）
+
+wpa PATH=/home/citceae/SVF/Release-build/bin:/home/citceae/SVF/llvm-10.0.0.obj/bin:/home/citceae/SVF/llvm-10.0.0.obj/bin:/home/citceae/SVF/llvm-10.0.0.obj/bin:
+wpa和自带的callgraph都缺少行号信息
+
+1.runonmodule方法！！！try
+2.利用现有的runonfunction修改输出，记录图结构
+
+4.13
+runonmodule大成功！待细化
