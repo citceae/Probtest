@@ -1,17 +1,26 @@
 #include "graph_link.h"
 
-void modify_map(GraphLink* g, map<int,int>* cntmap){
-	cntmap->insert(pair<int,int>(4,12));
-	cntmap->insert(pair<int,int>(5,12));
-	cntmap->insert(pair<int,int>(6,2));
-	cntmap->insert(pair<int,int>(7,0));
-	cntmap->insert(pair<int,int>(8,0));
-	cntmap->insert(pair<int,int>(11,0));
-	cntmap->insert(pair<int,int>(15,2));
-	cntmap->insert(pair<int,int>(19,10));
-	modify_visit(g,4);
-	modify_visit(g,5);
-	modify_visit(g,6);
-	modify_visit(g,15);
-	modify_visit(g,19);
+void modify_map(GraphLink* g, map<FuncLine,int>* cntmap){
+	FuncLine FL;
+	FL.name = (char*)"add";FL.line = 4;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 12));
+	FL.name = (char*)"add";FL.line = 5;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 12));
+	FL.name = (char*)"add";FL.line = 6;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 2));
+	FL.name = (char*)"add";FL.line = 7;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 0));
+	FL.name = (char*)"add";FL.line = 8;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 0));
+	FL.name = (char*)"add";FL.line = 11;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 0));
+	FL.name = (char*)"add";FL.line = 15;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 2));
+	FL.name = (char*)"add";FL.line = 19;
+	cntmap->insert(std::map<FuncLine, int>::value_type (FL, 10));
+	modify_visit(g,(char*)"add", 4);
+	modify_visit(g,(char*)"add", 5);
+	modify_visit(g,(char*)"add", 6);
+	modify_visit(g,(char*)"add", 15);
+	modify_visit(g,(char*)"add", 19);
 }

@@ -204,7 +204,59 @@ wpa PATH=/home/citceae/SVF/Release-build/bin:/home/citceae/SVF/llvm-10.0.0.obj/b
 wpa和自带的callgraph都缺少行号信息
 
 1.runonmodule方法！！！try
-2.利用现有的runonfunction修改输出，记录图结构
+2.利用现有的runonfunction修改输出，记录图结构 DONE
 
 4.13
 runonmodule大成功！待细化
+获得了所有单个的图结构，需要一个合并函数。
+
+Gcov的多文件：
+多文件：
+gcc -fprofile-arcs -ftest-coverage -c srcfile.c (.c)
+gcc srcfile.o -o srcfile -lgcov 或gcc srcfile.o –o srcfile -fprofile-arcs
+
+计数器清零：
+ lcov --directory . --zerocounters
+
+ TODO：
+ 节点的标志符仍然需要换成函数名+行号 或者至少要有这条信息(或者在成为一个大的nodetable后可能也并不需要？)
+ 挨个寻找前驱节点的函数func(G,idx)
+ 一个大的合并两个图为一个图的函数，func(G1,G2,idx in G1) 注意检查重边
+
+ DARPAcgc数据集需要32位虚拟机及对应环境，官网提供的虚拟机打不开orz
+
+ 4.18
+ 节点标志符替换完成 注意char*的比较strcmp
+ 函数的出口暂时直接以块标记中最后一个处理(可能会有问题？)
+ zz如我在重新make....
+ 如果顺利的话现在得到的.so内部的图是完全联通的 DONEEEEEEEEEEEEEEEEEE!! (未测试删点的全部情况)
+ 下一步：
+ `1.将图打印出来提供给主程序
+ `2.主程序的图做对应修改
+ `3.脚本修改结合多个gcov文件信息
+ 以上完成后可以测试简单的多文件过程间覆盖情况
+
+ 找数据集！！！先看论文多找找实验部分 退一步问越南师兄
+
+【llvm安装相关】
+ 不小心make clean了llvm，重新make过程中遇到了：collect2: error: ld terminated with signal 9 [Killed]
+ 而我不记得当年是怎么解决的了 cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm 改成release模式试探
+ 在改成release模式后再 按照官网的多线程 `make -j 4 似乎可行
+
+4.20
+CFG部分大概完成，由于参数增加了函数名，需要思考如何利用gcov给出的信息（显然也有函数名，双key map？？）
+map<struct,int> DONE
+CFG目标格式确定，下一步修改jsonread
+多文件时候的参数感觉需要看真实实验数据长什么样再设计
+先折腾一会数据集！
+主要问题：
+算法依赖于对源码进行的底层插装编译，而一般的数据集往往make给各个项目指定了一套编译方法（这一部分需要由自己做）准备程序镜像自行编译
+退一步的可能是只拿一些拥有input grammar的程序
+
+4.28
+多参数的partition分割
+重写sy.py
+
+过程梳理：
+python3 sy2.py pathame 去读该path下的input grammar 分解获取程序名称prog（list） 参数类型及对应范围（设置默认）
+非整数的random？

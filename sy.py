@@ -60,13 +60,13 @@ def divide_cases(allcases:list, cases:list, partition:list):
         cases[idx].append(case)
     
 
-#also reset the count of gcov
+#also reset the count of gcov TODO:can be modify
 def recpile(cmdarg):
     cmdstr = "gcc -fprofile-arcs -ftest-coverage {filename} -o test ".format(filename = cmdarg)
     #print(cmdstr)
     os.system(cmdstr)
 
-#generate {targetfunction}.c , which descripe CFG of the target function
+#generate {targetfunction}.c , which descripe CFG of the target function TODO:single.ll.c
 def mvgraph_gen(cmdarg):
     cmdstr = "clang {filename} -emit-llvm -c -o test.bc -g && opt -load libMyCFGPass.so -MyCFG test.bc \
     && mv myfunc.c graph_gen.c".format(filename = cmdarg) #myfunc.c shoule be send to this function as a parameter?

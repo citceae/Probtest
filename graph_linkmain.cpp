@@ -15,7 +15,7 @@ int main(){
   //topo_sort(&gl);
   //printf("\n");
 
-  map<int, int> cntmap;
+  map<FuncLine, int> cntmap;
   modify_map(&gl,&cntmap);
 
   automodify(&gl,cntmap);
