@@ -260,3 +260,57 @@ CFG目标格式确定，下一步修改jsonread
 过程梳理：
 python3 sy2.py pathame 去读该path下的input grammar 分解获取程序名称prog（list） 参数类型及对应范围（设置默认）
 非整数的random？
+
+编译过程相关：
+gcc -fprofile-arcs -ftest-coverage -c *.c -o *.o
+gcc *.o -o test -lgcov
+lcov --directory . --zerocounters
+
+(Makefile需要空格，似乎)
+如何执行子目录的make命令 只能cd并执行？ok那就这样吧 记录下相对路径
+CFG的生成需要根据目标格式（line249）修改MulCFGPass
+也需要根据modify_map的格式修改jsonread（多文件时候的read问题？）
+A LOT OF TODO
+先把多文件的clang命令支持了，似乎也可以写在Makefile里
+time for loop
+
+modify_visit的标记 双数组就好了好像
+jsonread格式处理完 就可以跑了！(似乎改好了)
+遗留问题：double型随机如何处理 randint + random
+跑起来后需要构建更多数据 并与随机进行对比
+
+标准格式：test single.ll 等命名
+
+跑起来了qaq
+如何设置实验终止条件
+
+"#include<stdio.h>
+#include <stdlib.h>
+void getgrade(int score){
+    int grade;
+    if(score>=90)
+      grade = 1;
+    else if(score >= 80)
+      grade = 2;//return succeed
+    else if(score>=70)
+      return;
+    else if(score>=60)
+      return;
+    else if(score>=50)
+      return;
+    else return;
+    return;
+}
+int main(int argc, char* argv[])
+{
+    int score;
+    //printf("Enter score: ");
+    score = atoi(argv[1]);
+    getgrade(score);
+
+    return 0;
+}"    FAIL
+测试样例如果没有一些合适的return 建图可能会fail
+如果有事实上无法到达的line如一些return后的return，会影响reward计算
+超级汇有点问题orz在pass里直接识别出交界点 似乎改动成立
+
