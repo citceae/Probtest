@@ -1,0 +1,38 @@
+        -:    0:Source:test.c
+        -:    0:Graph:test.gcno
+        -:    0:Data:test.gcda
+        -:    0:Runs:2
+        -:    0:Source is newer than graph
+        -:    1:#include<stdio.h>
+        -:    2:
+       92:    3:void myfunc2(int x){
+       92:    4:    if (x>=9900){
+    #####:    5:	    if(x>=9950){
+    #####:    6:	        if(x>=9990){
+    #####:    7:	    	    return;
+        -:    8:	        }
+        -:    9:	        else{
+    #####:   10:	            return;
+        -:   11:	        }
+        -:   12:	    }
+        -:   13:	    else{
+    #####:   14:	        return;
+        -:   15:	    }
+        -:   16:    }
+        -:   17:    else{
+       92:   18:        return;
+        -:   19:    }
+        -:   20:}
+        -:   21:
+        2:   22:int main(){
+        -:   23:    int a;
+        -:   24:    //input range setting: [-10000,9999]
+        2:   25:    freopen("input.txt","r",stdin);
+        -:   26:    //while scanf
+      205:   27:    while(scanf("%d",&a)!=EOF){
+      203:   28:    	if(a<0)
+       92:   29:            myfunc2(a);
+        -:   30:    }
+        2:   31:    printf("succeed\n");
+        2:   32:    return 0;
+        -:   33:}

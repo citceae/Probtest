@@ -23,14 +23,7 @@ void show_graph_link(GraphLink* g){
     printf(" NULL\n");
   }
 }
-//插入顶点
-void insert_vertex(GraphLink* g, char* func, int v){
-  if(g->NumVertices >= g->MaxVertices)return;
-  g->nodeTable[g->NumVertices].idx = v;
-  g->nodeTable[g->NumVertices].name = func;
-  g->nodeTable[g->NumVertices].visited = 0;
-  g->NumVertices++;
-}
+
 //查找顶点的index
 int getVertexIndex(GraphLink* g, char* func, int v){
   for(int i = 0; i < g->NumVertices; ++i){
@@ -38,6 +31,17 @@ int getVertexIndex(GraphLink* g, char* func, int v){
   }
   return -1;
 }
+//插入顶点
+void insert_vertex(GraphLink* g, char* func, int v){
+  if(g->NumVertices >= g->MaxVertices)return;
+  if(getVertexIndex(g,func,v)!=-1)
+    return;
+  g->nodeTable[g->NumVertices].idx = v;
+  g->nodeTable[g->NumVertices].name = func;
+  g->nodeTable[g->NumVertices].visited = 0;
+  g->NumVertices++;
+}
+
 //插入边(头插）
 void insert_edge_head(GraphLink* g, char* func1, int v1, char* func2, int v2){
   int p1 = getVertexIndex(g, func1, v1);
@@ -133,14 +137,19 @@ void automodify(GraphLink* g, map<FuncLine,int> mymap){
   int idx = 0;
   int toidx = 0;
   int edges = 0;
+  //处理ifelse使得无后继节点变多
+  int super = -1;
   for(int i = 0; i < g->NumVertices; ++i){
     idx = g->nodeTable[i].idx;
     edges = 0;
     /*if(0 != mymap[idx])
       modify_visit(g,idx);*/
     Edge* p = g->nodeTable[i].adj;
-    if(NULL == p)
-      modify_visit(g,g->nodeTable[i].name,idx);//超级汇标记为已访问
+    if(NULL == p){
+      //modify_visit(g,g->nodeTable[i].name,idx);//超级汇标记为已访问
+      if (i>super)
+        super = i;//寻找超级汇
+    }
     //count edges
     while(NULL != p){
       edges++;
@@ -152,10 +161,12 @@ void automodify(GraphLink* g, map<FuncLine,int> mymap){
       if(2 <= edges){
         FuncLine FL1;FL1.name = g->nodeTable[i].name;FL1.line=idx;
         FuncLine FL2;FL2.name = g->nodeTable[p->idx].name;FL2.line=toidx;
-        modify_prob(g,FL1.name,FL1.line,FL2.name,FL2.line ,(double)(mymap[FL2]+1)/(mymap[FL1]+edges));
+        modify_prob(g,FL1.name,FL1.line,FL2.name,FL2.line ,(double)(mymap[FL2]+0.05)/(mymap[FL1]+0.05*edges));
       }
       p = p->link;
     }
   }
+  if(super!=-1)
+    modify_visit(g,g->nodeTable[super].name,g->nodeTable[super].idx);
 }
 

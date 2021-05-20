@@ -64,6 +64,43 @@ class Partition:
                 case2.append(case)
         cases.insert(idx1,case2)
         cases.insert(idx1,case1)
+    
+    def prob_divide(self,reward:list,cases:list):#prob divide按照概率加权进行分割，会变好吗
+        assert(reward)
+        idxes=[i for i in range(len(reward))]
+        idx1 = random.choices(idxes,weights=reward)[0]
+        beidx = reward.index(max(reward))
+        if idx1 != beidx:
+            print("-----------------------------------------")
+        to_divide_part = self.partition.pop(idx1)
+        copy_part = copy.deepcopy(to_divide_part)
+        to_varilen = len(to_divide_part)
+        idx2 = random.randint(0,to_varilen-1)
+        to_divide_part_x = to_divide_part.pop(idx2)
+        assert(len(to_divide_part_x) == 2)
+
+        mid = int((to_divide_part_x[0] + to_divide_part_x[1])/2)
+        divided_part_x1 = [to_divide_part_x[0],mid]
+        divided_part_x2 = [mid, to_divide_part_x[1]]
+
+        to_divide_part.insert(idx2,divided_part_x2)
+        self.partition.insert(idx1,to_divide_part)
+        
+        copy_part.pop(idx2)
+        copy_part.insert(idx2,divided_part_x1)
+        self.partition.insert(idx1,copy_part)
+
+        #divide cases
+        to_divide_cases = cases.pop(idx1) #will it be empty?
+        case1 = []
+        case2 = []
+        for case in to_divide_cases:
+            if(case[idx2] < mid):
+                case1.append(case)
+            else:
+                case2.append(case)
+        cases.insert(idx1,case2)
+        cases.insert(idx1,case1)
 
     def fsampling(self,cases:list,K):
         assert(len(self.partition)==2)
@@ -86,7 +123,22 @@ class Partition:
             selected_part = self.partition[idx]
             vari_num = len(selected_part)
             new_case = []
-            for i in range(vari_num):#random sample non-int?
+            for i in range(vari_num):                               #random sample non-int?
+                start = selected_part[i][0]
+                stop = selected_part[i][1]
+                new_case.append(random.randint(start, stop))
+            cases[idx].append(new_case)
+    
+    def dsampling(self,reward:list,cases:list,k): #delete all used case
+        for i in range(len(cases)):
+            cases[i].clear()
+        idxes=[i for i in range(len(reward))]
+        for i in range(k):
+            idx = random.choices(idxes,weights=reward)[0]
+            selected_part = self.partition[idx]
+            vari_num = len(selected_part)
+            new_case = []
+            for i in range(vari_num):                               #random sample non-int?
                 start = selected_part[i][0]
                 stop = selected_part[i][1]
                 new_case.append(random.randint(start, stop))
@@ -94,6 +146,16 @@ class Partition:
 
     def printp(self):
         print(self.partition)
+
+def puresampleite(vari,allcases_random,one_sample_k,iteration):
+    ite = (iteration+1)*(iteration)/2
+    for i in range(one_sample_k*(int)(ite)):
+        new_case = []
+        for j in range(len(vari)):
+            start = vari[j][0]
+            stop = vari[j][1]
+            new_case.append(random.randint(start, stop))
+        allcases_random.append(new_case)
 
 def puresample(vari,allcases_random,one_sample_k,iteration):
     for i in range(one_sample_k*iteration):
@@ -103,7 +165,6 @@ def puresample(vari,allcases_random,one_sample_k,iteration):
             stop = vari[j][1]
             new_case.append(random.randint(start, stop))
         allcases_random.append(new_case)
-
 
 def utf8open(filename):
     return open(filename, encoding='utf-8', errors='ignore')
@@ -154,6 +215,16 @@ def loop_cases(workpath,cases,filenames,reached,reward):
         mi = res.stdout.readlines()
         reward.append(float(str(mi[0],encoding='utf-8')))
 
+def initreport(workpath,cases):
+    gcov_zero(workpath)
+    for case in cases:
+        cmdstr = f" {workpath}/test"
+        for x in case:
+            cmdstr = cmdstr + ' ' + str(x)
+        os.system(cmdstr)
+    cmdstr = f"cd {workpath} && gcovr -r ."
+    os.system(cmdstr)
+
 def report(workpath,allcases_random,allcases_prob):
     gcov_zero(workpath)
     for case in allcases_random:
@@ -194,9 +265,9 @@ if __name__ == '__main__':
     cases = [[],[]]
     reward = []
     reached = []
-    K = 5
+    K = 2
     one_sample_k = 1
-    iteration = 8
+    iteration = 3
 
     part = Partition([vari])   
     part.fdivide()
@@ -204,24 +275,33 @@ if __name__ == '__main__':
 
     #random
     allcases_random = reduce(lambda x,y:x+y,cases)
-    puresample(vari, allcases_random, one_sample_k, iteration)
+    #print(allcases_random)
+    initreport(workpath, allcases_random)
+
+    puresampleite(vari, allcases_random, one_sample_k, iteration)
+    #puresample(vari, allcases_random, one_sample_k, iteration)
 
     mvgraph_gen(workpath)
     #cmdarg = f"cd {workpath} && make test "
     #os.system(cmdarg)
+    
     for i in range(iteration):
         loop_cases(workpath, cases,filenames,reached,reward)
-        #print("iteration",i,' partition:',part.partition,' reward:',reward)
-        #print(list(map(len,cases)))
-        #print(reached)
-        part.sampling(reward, cases, one_sample_k)
-        part.divide(reward, cases)
+        print("iteration",i,' partition:',part.partition,' reward:',reward)
+        print(list(map(len,cases)))
+        print(reached)
+        part.sampling(reward, cases, one_sample_k*(i+1))#增加单轮采样？
+        #part.sampling(reward, cases, one_sample_k)#不增加单轮采样？
+        #part.dsampling(reward,cases,one_sample_k*(i+1))
+        part.prob_divide(reward, cases)
+        if reward[0] == 0:
+            break;
 
     allcases_prob = reduce(lambda x,y:x+y,cases)
     report(workpath, allcases_random, allcases_prob)
 
-    print(allcases_random)
-    print(allcases_prob)
+    print(len(allcases_random))
+    print(len(allcases_prob))
     print(reached)
     part.printp()
     print(reward)

@@ -1,0 +1,17 @@
+digraph "CFG for 'main' function" {
+	label="CFG for 'main' function";
+
+	Node0x5608a44fa4e0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#b9d0f970",label="{entry:\l  %retval = alloca i32, align 4\l  %a = alloca i32, align 4\l  store i32 0, i32* %retval, align 4\l  %0 = load %struct._IO_FILE*, %struct._IO_FILE** @stdin, align 8\l  %call = call %struct._IO_FILE* @freopen(i8* getelementptr inbounds ([10 x\l... i8], [10 x i8]* @.str, i64 0, i64 0), i8* getelementptr inbounds ([2 x i8],\l... [2 x i8]* @.str.1, i64 0, i64 0), %struct._IO_FILE* %0)\l  br label %while.cond\l}"];
+	Node0x5608a44fa4e0 -> Node0x5608a44faca0;
+	Node0x5608a44faca0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{while.cond:                                       \l  %call1 = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([3\l... x i8], [3 x i8]* @.str.2, i64 0, i64 0), i32* %a)\l  %cmp = icmp ne i32 %call1, -1\l  br i1 %cmp, label %while.body, label %while.end\l|{<s0>T|<s1>F}}"];
+	Node0x5608a44faca0:s0 -> Node0x5608a44fb120;
+	Node0x5608a44faca0:s1 -> Node0x5608a44fb1a0;
+	Node0x5608a44fb120 [shape=record,color="#b70d28ff", style=filled, fillcolor="#bb1b2c70",label="{while.body:                                       \l  %1 = load i32, i32* %a, align 4\l  %cmp2 = icmp slt i32 %1, 0\l  br i1 %cmp2, label %if.then, label %if.end\l|{<s0>T|<s1>F}}"];
+	Node0x5608a44fb120:s0 -> Node0x5608a44fb3f0;
+	Node0x5608a44fb120:s1 -> Node0x5608a44fb460;
+	Node0x5608a44fb3f0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ec7f6370",label="{if.then:                                          \l  %2 = load i32, i32* %a, align 4\l  call void @myfunc2(i32 %2)\l  br label %if.end\l}"];
+	Node0x5608a44fb3f0 -> Node0x5608a44fb460;
+	Node0x5608a44fb460 [shape=record,color="#b70d28ff", style=filled, fillcolor="#bb1b2c70",label="{if.end:                                           \l  br label %while.cond\l}"];
+	Node0x5608a44fb460 -> Node0x5608a44faca0;
+	Node0x5608a44fb1a0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#b9d0f970",label="{while.end:                                        \l  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8],\l... [9 x i8]* @.str.3, i64 0, i64 0))\l  ret i32 0\l}"];
+}

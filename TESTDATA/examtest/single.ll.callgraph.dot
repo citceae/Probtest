@@ -1,0 +1,9 @@
+digraph "Call graph: single.ll" {
+	label="Call graph: single.ll";
+
+	Node0x557c943ad6d0 [shape=record,label="{myfunc}"];
+	Node0x557c943e4c10 [shape=record,label="{main}"];
+	Node0x557c943e4c10 -> Node0x557c943e4cf0;
+	Node0x557c943e4c10 -> Node0x557c943ad6d0;
+	Node0x557c943e4cf0 [shape=record,label="{atoi}"];
+}

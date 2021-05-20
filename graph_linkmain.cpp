@@ -40,10 +40,41 @@ int main(){
   int size = gl.NumVertices;
   MatrixXf A(size,size);
   VectorXf B(size);
-  modify_matrix(&gl, A, B);
+  for(int i=0;i<size;++i)
+  {
+    B(i)=0;
+    for(int j=0;j<size;++j)
+      A(i,j)=0;
+  }
+  /*for(int i = 0;i<size;++i)
+  {
+    for(int j =0;j<size;++j)
+      cout<<A(i,j)<<' ';
+    cout<<endl;
+  }
+  cout<<endl;
+  cout<<A(size-1,0)<<endl;
+  A(size-1,0)=0;
+  cout<<A(size-1,0)<<endl;
+  cout<<"----------------------------"<<endl;
+  
+  */
+  
   //cout<<A<<endl<<endl<<B<<endl;
   //printf("\n");
+  modify_matrix(&gl, A, B);
+  /*
+  for(int i = 0;i<size;++i)
+  {
+    for(int j =0;j<size;++j)
+      cout<<A(i,j)<<' ';
+    cout<<endl;
+  }
+  cout<<endl;
 
+  for(int i = 0;i<size;++i)
+    cout<<B(i)<<' ';
+  cout<<endl;*/
   //解reward x(0)
   VectorXf x = A.colPivHouseholderQr().solve(B);
   cout<<x(0);

@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-void myfunc(int x){
+void myfunc2(int x){
     if (x>=9900){
 	    if(x>=9950){
 	        if(x>=9990){
@@ -26,7 +26,7 @@ int main(){
     //while scanf
     while(scanf("%d",&a)!=EOF){
     	if(a<0)
-            myfunc(a);
+            myfunc2(a);
     }
     printf("succeed\n");
     return 0;

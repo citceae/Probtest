@@ -1,0 +1,22 @@
+digraph "CFG for 'myfunc2' function" {
+	label="CFG for 'myfunc2' function";
+
+	Node0x5608a44f9030 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{entry:\l  %x.addr = alloca i32, align 4\l  store i32 %x, i32* %x.addr, align 4\l  %0 = load i32, i32* %x.addr, align 4\l  %cmp = icmp sge i32 %0, 9900\l  br i1 %cmp, label %if.then, label %if.else6\l|{<s0>T|<s1>F}}"];
+	Node0x5608a44f9030:s0 -> Node0x5608a44f9870;
+	Node0x5608a44f9030:s1 -> Node0x5608a44f98e0;
+	Node0x5608a44f9870 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#e97a5f70",label="{if.then:                                          \l  %1 = load i32, i32* %x.addr, align 4\l  %cmp1 = icmp sge i32 %1, 9950\l  br i1 %cmp1, label %if.then2, label %if.else5\l|{<s0>T|<s1>F}}"];
+	Node0x5608a44f9870:s0 -> Node0x5608a44f9b30;
+	Node0x5608a44f9870:s1 -> Node0x5608a44f9bb0;
+	Node0x5608a44f9b30 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f7bca170",label="{if.then2:                                         \l  %2 = load i32, i32* %x.addr, align 4\l  %cmp3 = icmp sge i32 %2, 9990\l  br i1 %cmp3, label %if.then4, label %if.else\l|{<s0>T|<s1>F}}"];
+	Node0x5608a44f9b30:s0 -> Node0x5608a44f9e10;
+	Node0x5608a44f9b30:s1 -> Node0x5608a44f9e90;
+	Node0x5608a44f9e10 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#dedcdb70",label="{if.then4:                                         \l  br label %return\l}"];
+	Node0x5608a44f9e10 -> Node0x5608a44fa010;
+	Node0x5608a44f9e90 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#dedcdb70",label="{if.else:                                          \l  br label %return\l}"];
+	Node0x5608a44f9e90 -> Node0x5608a44fa010;
+	Node0x5608a44f9bb0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f7bca170",label="{if.else5:                                         \l  br label %return\l}"];
+	Node0x5608a44f9bb0 -> Node0x5608a44fa010;
+	Node0x5608a44f98e0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#e97a5f70",label="{if.else6:                                         \l  br label %return\l}"];
+	Node0x5608a44f98e0 -> Node0x5608a44fa010;
+	Node0x5608a44fa010 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{return:                                           \l  ret void\l}"];
+}
